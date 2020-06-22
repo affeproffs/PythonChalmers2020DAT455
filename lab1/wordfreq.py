@@ -1,22 +1,7 @@
+import re
+
 def tokenize(lines):
-    if not lines:
-        return []
-
-    tokens = []
-    word = ""
-    for c in lines[0].lower():
-        if not(c.isspace()):
-            cType = "a" if c.isalpha() else "d" if c.isdigit() else "s"
-            wType = "a" if word.isalpha() else "d" if word.isdigit() else cType if word == "" else "s"
-            if(cType == wType):
-                word += c
-            else:
-                tokens.append(word)
-                word = c
-        elif(word):
-            tokens.append(word)
-            word = ""
-        
-    return tokens + [word] if word else tokens
-
-#print(tokenize(['10  S2we.et  Apple  Tarts.']))
+    if not lines: return lines
+    digits = re.compile('(\d+|[^\w\s])').sub(r' \1 ', lines[0].strip().lower())
+    spaces = re.compile('(\s+)').sub(' ', digits)
+    return list(filter(lambda w: w != '', spaces.split(" ")))
