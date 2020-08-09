@@ -52,7 +52,6 @@ class Game:
         
 """ Models a player """
 class Player:
-   #HINT: It should probably take the Game that creates it as parameter and some additional properties that differ between players (like firing-direction, position and color)
     def __init__(self, game, firingDir, x, color):
         self.game = game
         self.firingDir = firingDir
@@ -62,28 +61,29 @@ class Player:
     
     """ Create and return a projectile starting at the centre of this players cannon. Replaces any previous projectile for this player. """
     def fire(self, angle, velocity):
+        if (self.color == "red"):
+            angle += 90
         self.projectile = Projectile(angle, velocity, self.game.getCurrentWind(), self.x,
                                      self.game.getCannonSize() / 2, -110, 110)
         self.firingDir = (angle, velocity)
-
         return self.projectile
 
     """ Gives the x-distance from this players cannon to a projectile. If the cannon and the projectile touch (assuming the projectile is on the ground and factoring in both cannon and projectile size) this method should return 0"""
     def projectileDistance(self, proj):
-        # HINT: both self (a Player) and proj (a Projectile) have getX()-methods.
-        # HINT: This method should give a negative value if the projectile missed to the left and positive if it missed to the right.
-        # The distance should be how far the projectile and cannon are from touching, not the distance between their centers.
-        # You probably need to use getCannonSize and getBallSize from Game to compensate for the size of cannons/cannonballs
-        projLower = proj.getX() - self.game.getBallSize() / 2
-        projUpper = proj.getX() + self.game.getBallSize() / 2
+        projLower = proj.getX() - self.game.getBallSize()
+        projUpper = proj.getX() + self.game.getBallSize()
         
         playerLower = self.getX() - self.game.getCannonSize() / 2
         playerUpper = self.getX() + self.game.getCannonSize() / 2
 
-        print(playerLower, playerUpper)
-        print(projLower, projUpper)
-        print(playerLower - projUpper, playerUpper - projUpper,
-              projLower - playerLower, playerUpper - projLower)
+        # Miss to the left
+        if(projUpper < playerLower):
+            return abs(playerLower - projUpper) * -1
+        # Miss to the right
+        elif(projLower > playerUpper):
+            return projLower - playerUpper
+        
+        return 0 # Hit
 
     """ The current score of this player """
     def getScore(self):
