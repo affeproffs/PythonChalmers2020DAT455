@@ -130,8 +130,6 @@ def runTests(game):
     if (playerAtts > 8):
         print("Your Player object has {} attributes. This isn't necessarily wrong, but it seems a bit high.".format(playerAtts))
 
-
-
 def testGraphics(ggame):
     # First run the standard tests (same as for the model)
     runTests(ggame)

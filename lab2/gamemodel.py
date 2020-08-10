@@ -7,13 +7,16 @@ class Game:
     def __init__(self, cannonSize, ballSize):
         self.cannonSize = cannonSize
         self.ballSize = ballSize
-        self.players = [Player(self, (45, 40), -90, "blue"), Player(self, (-45, 40), 90, "red")]
+        self.setPlayers([Player(self, (45, 40), -90, "blue"), Player(self, (-45, 40), 90, "red")])
         self.currentPlayer = 0
         self.newRound()
 
     """ A list containing both players """
     def getPlayers(self):
         return self.players
+
+    def setPlayers(self, players):
+        self.players = players
 
     """ The height/width of the cannon """
     def getCannonSize(self):
