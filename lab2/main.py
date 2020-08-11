@@ -6,7 +6,7 @@ from gamegraphics import *
 # It fires a shot for the current player and animates it until it stops
 def graphicFire(game, angle, vel):
     player = game.getCurrentPlayer()
-    # create a shot and track until it hits ground or leaves window
+
     gproj = player.fire(angle, vel)
     while gproj.isMoving():
         gproj.update(1/50)
@@ -14,12 +14,23 @@ def graphicFire(game, angle, vel):
     return gproj
 
 def graphicPlay():
-    # TODO: This is where you implement the game loop
-    # HINT: Creating a GraphicGame is a good start. 
-    # HINT: You can look at the text interface for some inspiration
-    # Note that this code should not directly work with any drawing or such, all that is done by the methods in the classes
-    pass
+    game = Game(10, 3)
+    gGame = GraphicGame(game)
 
+    while True:
+        inputBox = InputDialog(game.getCurrentPlayer().getAim()[0],
+                               game.getCurrentPlayer().getAim()[1],
+                               game.getCurrentWind())
+        
+        if (inputBox.interact() == "Fire!"):
+            angle, vel = inputBox.getValues()
+            inputBox.close()
+        else:
+            return
+            
+        proj = graphicFire(gGame, angle, vel)
+        if (gGame.getOtherPlayer().projectileDistance(proj) == 0):
+            gGame.getCurrentPlayer().increaseScore()
+        gGame.nextPlayer()
 
-# Run the game with graphical interface
 graphicPlay()

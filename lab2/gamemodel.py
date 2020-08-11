@@ -7,7 +7,7 @@ class Game:
     def __init__(self, cannonSize, ballSize):
         self.cannonSize = cannonSize
         self.ballSize = ballSize
-        self.setPlayers([Player(self, (45, 40), -90, "blue"), Player(self, (-45, 40), 90, "red")])
+        self.setPlayers([Player(self, (45, 40), -90, "blue"), Player(self, (45, 40), 90, "red")])
         self.currentPlayer = 0
         self.newRound()
 
@@ -64,10 +64,10 @@ class Player:
     
     """ Create and return a projectile starting at the centre of this players cannon. Replaces any previous projectile for this player. """
     def fire(self, angle, velocity):
-        if (self.color == "red"):
-            angle += 90
-        self.projectile = Projectile(angle, velocity, self.game.getCurrentWind(), self.x,
+        self.projectile = Projectile(180 - angle if self.color == "red" else angle,
+                                     velocity, self.game.getCurrentWind(), self.x,
                                      self.game.getCannonSize() / 2, -110, 110)
+        
         self.firingDir = (angle, velocity)
         return self.projectile
 
@@ -108,8 +108,6 @@ class Player:
     def getAim(self):
         return self.firingDir[0], self.firingDir[1]
 
-
-
 """ Models a projectile (a cannonball, but could be used more generally) """
 class Projectile:
     """
@@ -129,7 +127,6 @@ class Projectile:
         self.xvel = velocity*cos(theta)
         self.yvel = velocity*sin(theta)
         self.wind = wind
-
 
     """ 
         Advance time by a given number of seconds

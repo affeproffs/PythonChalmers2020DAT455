@@ -133,7 +133,7 @@ def runTests(game):
 def testGraphics(ggame):
     # First run the standard tests (same as for the model)
     runTests(ggame)
-
+    
     # For these tests to work, you need to have a getWindow-method in GraphicGame
     w = ggame.getWindow()
 
@@ -152,11 +152,9 @@ def testGraphics(ggame):
 
     # Fire a red projectile and move it a bit
     ggame.setCurrentWind(0)
-    ggame.getCurrentPlayer().fire(30, 30).update(2)
-    
+    ggame.getCurrentPlayer().fire(30, 30).update(2)    
 
     circles = [x for x in w.items if type(x) == circ_type]
-    
     assert len(circles) <= 2, "there should never be more than two circles! You need to undraw old cannonballs"
 
 
