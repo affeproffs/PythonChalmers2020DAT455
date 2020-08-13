@@ -31,6 +31,8 @@ def graphicPlay():
         proj = graphicFire(gGame, angle, vel)
         if (gGame.getOtherPlayer().projectileDistance(proj) == 0):
             gGame.getCurrentPlayer().increaseScore()
+            gGame.newRound()
+            
         gGame.nextPlayer()
 
 graphicPlay()
