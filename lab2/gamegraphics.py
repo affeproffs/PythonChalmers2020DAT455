@@ -22,44 +22,21 @@ class GraphicGame:
         horiLine = Line(Point(-110, 0), Point(110, 0))
         horiLine.draw(self.win)
 
-    def getPlayers(self):
-        return self.game.getPlayers()
-
-    def getCannonSize(self):
-        return self.game.getCannonSize()
-
-    def getBallSize(self):
-        return self.game.getBallSize()    
-
-    def getCurrentPlayerNumber(self):
-        return self.game.getCurrentPlayerNumber()
-
-    def getCurrentPlayer(self):
-        return self.game.getCurrentPlayer()
-
-    def getOtherPlayer(self):
-        return self.game.getOtherPlayer()
-
-    def getCurrentWind(self):
-        return self.game.getCurrentWind()
-
     def setCurrentWind(self, wind):
         return self.game.setCurrentWind(wind)
 
-    def nextPlayer(self):
-        return self.game.nextPlayer()
-
-    def newRound(self):
-        return self.game.newRound()
-
     def getWindow(self):
         return self.win
+
+    def __getattr__(self, name):
+        return getattr(self.game, name)
 
 class GraphicPlayer:
     def __init__(self, player, game):
         self.player = player
         self.game = game
         self.proj = None
+        
         p1 = Point(player.x - game.getCannonSize() / 2, game.getCannonSize())
         p2 = Point(player.x + game.getCannonSize() / 2, 0)        
         pRect = Rectangle(p1, p2)
@@ -77,20 +54,7 @@ class GraphicPlayer:
             self.proj.undraw()
 
         self.proj = GraphicProjectile(proj, self.game, self.getColor())
-
         return self.proj
-    
-    def getAim(self):
-        return self.player.getAim()
-        
-    def getColor(self):
-        return self.player.getColor()
-
-    def getX(self):
-        return self.player.getX()
-
-    def getScore(self):
-        return self.player.getScore()
 
     def projectileDistance(self, proj):
         return self.player.projectileDistance(proj)
@@ -99,17 +63,19 @@ class GraphicPlayer:
         self.player.increaseScore()
         self.scoreGraphic.setText("Score: " + str(self.getScore()))
 
+    def __getattr__(self, name):
+        return getattr(self.player, name)
+
 """ A graphic wrapper around the Projectile class (adapted from ShotTracker in book)"""
 class GraphicProjectile:
     def __init__(self, proj, game, color):
         self.proj = proj
         self.game = game
-        self.color = color
 
         graphic = Circle(Point(proj.getX(), proj.getY()), game.getBallSize())
-        graphic.draw(game.getWindow())
         graphic.setOutline(color)
-        graphic.setFill(color)
+        graphic.setFill(color)        
+        graphic.draw(game.getWindow())
         
         self.graphic = graphic
 
@@ -117,20 +83,14 @@ class GraphicProjectile:
         oldX, oldY = self.proj.getX(), self.proj.getY()        
         self.proj.update(dt)        
         newX, newY = self.proj.getX(), self.proj.getY()
-
         self.graphic.move(newX - oldX, newY - oldY)
-        
-    def getX(self):
-        return self.proj.getX()
-
-    def getY(self):
-        return self.proj.getY()
-
-    def isMoving(self):
-        return self.proj.isMoving()
 
     def undraw(self):
         self.graphic.undraw()
+
+    def __getattr__(self, name):
+        return getattr(self.proj, name)
+        
 
 """ A somewhat specific input dialog class (adapted from the book) """
 class InputDialog:
